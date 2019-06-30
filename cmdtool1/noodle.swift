@@ -131,11 +131,17 @@ class Noodle{
         }
         let invalid:NoneProcessd = NoneProcessd(leftover: invalids, fileName: "invalid")
         let rev0:RevisedDict = RevisedDict(rev0s, "rev0")
+        let count0 = rev0s.count
         //let rev1:RevisedDict = RevisedDict(rev1s, "rev1")
         let revX:RevisedDict = RevisedDict(revXs, "revX")
+        let countx = revXs.count
         let revMultList = mapReduce(revXs)
+        let countXReduced = revMultList.count
         let revMulti:RevisedDict = RevisedDict(revMultList,"revMulti")
         
+        rev0s.append(contentsOf: revMultList)
+        print("dictCount: \(count0) + \(countx)::\(countXReduced) rev0s\(rev0s.count)")
+        let revDict:RevisedDict = RevisedDict(rev0s, "revDict")
 //        let dict1 = miniDict(charPhones)
         do{
 //            try dict1.save()
@@ -144,6 +150,8 @@ class Noodle{
               //try rev1.save()
               try revX.save()
               try revMulti.save()
+              try revDict.save()
+            
         }catch{
             consoleIO.writeMessage(error.localizedDescription, to: .error)
         }

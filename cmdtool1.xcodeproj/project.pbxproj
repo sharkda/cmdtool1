@@ -40,6 +40,7 @@
 		B267764322C7409400AA657E /* noodle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noodle.swift; sourceTree = "<group>"; };
 		B267764522C7D11E00AA657E /* miniDict.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
 		B2F7043922C8A46B00FCE837 /* RevisedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisedDict.swift; sourceTree = "<group>"; };
+		B2F7043B22C9135200FCE837 /* revDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = revDict.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 				B267763B22C5EE8B00AA657E /* consoleIO.swift */,
 				B267763922C5C7BC00AA657E /* mini.csv */,
 				B267763A22C5D4A200AA657E /* revised.csv */,
+				B2F7043B22C9135200FCE837 /* revDict.json */,
 				B267764122C73D4500AA657E /* filePro.swift */,
 			);
 			path = cmdtool1;
