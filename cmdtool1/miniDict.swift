@@ -31,6 +31,7 @@ struct CharPhone: Codable {
     }
 }
 
+
 struct miniDict:Encodable, Decodable{
     var charPhones = [CharPhone]()
 
@@ -64,7 +65,7 @@ extension Character: Codable {
     
     
     public func encode (to encoder: Encoder)throws{
-        print("encodable encode")
+        //print("encodable encode")
         let charString = String(self)
         var container = encoder.singleValueContainer()
         try container.encode(charString)

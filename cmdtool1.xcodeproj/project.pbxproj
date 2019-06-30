@@ -13,6 +13,7 @@
 		B267764022C6610400AA657E /* miniDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763F22C6610400AA657E /* miniDict.swift */; };
 		B267764222C73D4600AA657E /* filePro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764122C73D4500AA657E /* filePro.swift */; };
 		B267764422C7409400AA657E /* noodle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764322C7409400AA657E /* noodle.swift */; };
+		B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7043922C8A46B00FCE837 /* RevisedDict.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +39,7 @@
 		B267764122C73D4500AA657E /* filePro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filePro.swift; sourceTree = "<group>"; };
 		B267764322C7409400AA657E /* noodle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noodle.swift; sourceTree = "<group>"; };
 		B267764522C7D11E00AA657E /* miniDict.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
+		B2F7043922C8A46B00FCE837 /* RevisedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisedDict.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				B267763022C5BA0D00AA657E /* main.swift */,
 				B267763D22C65ED200AA657E /* panagram.swift */,
 				B267764322C7409400AA657E /* noodle.swift */,
+				B2F7043922C8A46B00FCE837 /* RevisedDict.swift */,
 				B267763F22C6610400AA657E /* miniDict.swift */,
 				B267763B22C5EE8B00AA657E /* consoleIO.swift */,
 				B267763922C5C7BC00AA657E /* mini.csv */,
@@ -144,6 +147,7 @@
 				B267763122C5BA0D00AA657E /* main.swift in Sources */,
 				B267764422C7409400AA657E /* noodle.swift in Sources */,
 				B267763E22C65ED200AA657E /* panagram.swift in Sources */,
+				B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */,
 				B267764022C6610400AA657E /* miniDict.swift in Sources */,
 				B267763C22C5EE8B00AA657E /* consoleIO.swift in Sources */,
 			);
