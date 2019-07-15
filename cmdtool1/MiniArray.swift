@@ -53,9 +53,83 @@ struct PhoneDict:Encodable{
     }
 }
 
-//tones
+struct ToneFullHouseDict:Encodable{
+    let dict:[String:ToneFullHouse]
+    let cmrSet:Set<String>
+    
+    func removeTonefromZhuyin(_ zy1:String)->String?{
+        var ar1:[Character] = Array(zy1)
+        let mpsArray:[Mps] = ar1.compactMap({Mps($0)})
+        guard mpsArray.count > 0 && mpsArray.count < 5 else {return nil}
+        guard let last = mpsArray.last else {return nil }
+        if last.type == MpsType.tone {
+            _ = ar1.removeLast()
+            return String(ar1)
+        }else{
+            return zy1
+        }
+    }
+    
+    func getToneFullHouse(_ zhuyin:String) -> ToneFullHouse?{
+        if let noTone = removeTonefromZhuyin(zhuyin){
+            return dict[noTone]
+        }else{
+            return nil
+        }
+    }
+    
+    func save(_ name:String = "toneFullHouseDict" ) throws {
+        print("\(name) save()")
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(self)
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(name).json"){
+            try data.write(to: url)
+            print("\(name) saved")
+        }else{
+            print("\(name) failed")
+        }
+    }
+}
+
+struct ToneFullHouse:Encodable{
+    let charArry1:[Character]
+    let charArry2:[Character]
+    let charArry3:[Character]
+    let charArry4:[Character]
+    let phone:String
+}
+
+//tones: [chars]
 struct ZyToChars:Encodable{
     let dictionary:[String:[Character]]
+    
+    func removeTonefromZhuyin(_ zy1:String)->String?{
+        var ar1:[Character] = Array(zy1)
+        let mpsArray:[Mps] = ar1.compactMap({Mps($0)})
+        guard mpsArray.count > 0 && mpsArray.count < 5 else {return nil}
+        guard let last = mpsArray.last else {return nil }
+        if last.type == MpsType.tone {
+            _ = ar1.removeLast()
+            return String(ar1)
+        }else{
+            return zy1
+        }
+    }
+    
+    func get4ToneChars(_ zy1:String) -> [[Character]]{
+        let cmr = removeTonefromZhuyin(zy1)
+        let cmr1:String = cmr! //+ String(Mps.t1.zhuyin)
+        let cmr2:String = cmr! + String(Mps.t2.zhuyin)
+        let cmr3:String = cmr! + String(Mps.t3.zhuyin)
+        let cmr4:String = cmr! + String(Mps.t4.zhuyin)
+        let ar1:[Character] = dictionary[cmr1] ?? [Character]()
+        let ar2:[Character] = dictionary[cmr2] ?? [Character]()
+        let ar3:[Character] = dictionary[cmr3] ?? [Character]()
+        let ar4:[Character] = dictionary[cmr4] ?? [Character]()
+        print("@get4ToneChars()\(cmr!):\(ar1.count)-\(ar2.count)-\(ar3.count)-\(ar4.count)")
+        return [ar1, ar2, ar3, ar4]
+    }
     
     func save(_ name:String = "zy2Char" ) throws {
         print("\(name) save()")
