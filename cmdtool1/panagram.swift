@@ -12,7 +12,7 @@ class Panagram {
     
     func staticMode() {
         consoleIO.printUsage()
-        noodle.json1()
+//        noodle.json1()
     }
     
 }

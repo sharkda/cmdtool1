@@ -21,7 +21,7 @@ struct CharPhone: Codable {
     
     enum CodingKeys: String, CodingKey{
         case character = "chr"
-        case zhuyins = "zys"
+        case zhuyins = "zhy"
     }
 
     //TODO:parse the text/csv file. notice how to handle the alternative!
@@ -31,8 +31,49 @@ struct CharPhone: Codable {
     }
 }
 
+struct PhoneDict:Encodable{
+    
+    let dictionary:[Character: [String]]
+    
+    init(_ dict:[Character:[String]]) {
+        self.dictionary = dict
+    }
+    
+    func save(_ name:String = "zhuyin" ) throws {
+        print("\(name) save()")
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(self)
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(name).json"){
+            try data.write(to: url)
+            print("\(name) saved")
+        }else{
+            print("\(name) failed")
+        }
+    }
+}
 
-struct miniDict:Encodable, Decodable{
+//tones
+struct ZyToChars:Encodable{
+    let dictionary:[String:[Character]]
+    
+    func save(_ name:String = "zy2Char" ) throws {
+        print("\(name) save()")
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(self)
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(name).json"){
+            try data.write(to: url)
+            print("\(name) saved")
+        }else{
+            print("\(name) failed")
+        }
+    }
+}
+
+
+
+struct MiniArray:Encodable, Decodable{
     var charPhones = [CharPhone]()
 
     init(_ cps:[CharPhone])
@@ -40,11 +81,11 @@ struct miniDict:Encodable, Decodable{
         charPhones = cps 
     }
     func save() throws {
-        print("miniDict.Save()")
+        print("miniArray.Save()")
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let data = try encoder.encode(self)
-        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("miniDict.json"){
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("miniArray.json"){
             try data.write(to: url)
             print("saved")
         }else{
@@ -52,6 +93,7 @@ struct miniDict:Encodable, Decodable{
         }
     }
 }
+
 
 //MARK: decode extension will fail. so I change the scene to use string as internal storage
 extension Character: Codable {

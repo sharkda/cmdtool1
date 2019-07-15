@@ -10,7 +10,7 @@
 		B267763122C5BA0D00AA657E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763022C5BA0D00AA657E /* main.swift */; };
 		B267763C22C5EE8B00AA657E /* consoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763B22C5EE8B00AA657E /* consoleIO.swift */; };
 		B267763E22C65ED200AA657E /* panagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763D22C65ED200AA657E /* panagram.swift */; };
-		B267764022C6610400AA657E /* miniDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763F22C6610400AA657E /* miniDict.swift */; };
+		B267764022C6610400AA657E /* MiniArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763F22C6610400AA657E /* MiniArray.swift */; };
 		B267764222C73D4600AA657E /* filePro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764122C73D4500AA657E /* filePro.swift */; };
 		B267764422C7409400AA657E /* noodle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764322C7409400AA657E /* noodle.swift */; };
 		B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7043922C8A46B00FCE837 /* RevisedDict.swift */; };
@@ -35,12 +35,12 @@
 		B267763A22C5D4A200AA657E /* revised.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = revised.csv; sourceTree = "<group>"; };
 		B267763B22C5EE8B00AA657E /* consoleIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = consoleIO.swift; sourceTree = "<group>"; };
 		B267763D22C65ED200AA657E /* panagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = panagram.swift; sourceTree = "<group>"; };
-		B267763F22C6610400AA657E /* miniDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = miniDict.swift; sourceTree = "<group>"; };
+		B267763F22C6610400AA657E /* MiniArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniArray.swift; sourceTree = "<group>"; };
 		B267764122C73D4500AA657E /* filePro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = filePro.swift; sourceTree = "<group>"; };
 		B267764322C7409400AA657E /* noodle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noodle.swift; sourceTree = "<group>"; };
-		B267764522C7D11E00AA657E /* miniDict.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
 		B2F7043922C8A46B00FCE837 /* RevisedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisedDict.swift; sourceTree = "<group>"; };
 		B2F7043B22C9135200FCE837 /* revDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = revDict.json; sourceTree = "<group>"; };
+		B2F7043D22C9939100FCE837 /* miniDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,19 +73,27 @@
 		B267762F22C5BA0D00AA657E /* cmdtool1 */ = {
 			isa = PBXGroup;
 			children = (
-				B267764522C7D11E00AA657E /* miniDict.json */,
 				B267763022C5BA0D00AA657E /* main.swift */,
 				B267763D22C65ED200AA657E /* panagram.swift */,
 				B267764322C7409400AA657E /* noodle.swift */,
 				B2F7043922C8A46B00FCE837 /* RevisedDict.swift */,
-				B267763F22C6610400AA657E /* miniDict.swift */,
+				B267763F22C6610400AA657E /* MiniArray.swift */,
 				B267763B22C5EE8B00AA657E /* consoleIO.swift */,
-				B267763922C5C7BC00AA657E /* mini.csv */,
-				B267763A22C5D4A200AA657E /* revised.csv */,
-				B2F7043B22C9135200FCE837 /* revDict.json */,
+				B2F7043C22C9927200FCE837 /* data */,
 				B267764122C73D4500AA657E /* filePro.swift */,
 			);
 			path = cmdtool1;
+			sourceTree = "<group>";
+		};
+		B2F7043C22C9927200FCE837 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				B2F7043D22C9939100FCE837 /* miniDict.json */,
+				B2F7043B22C9135200FCE837 /* revDict.json */,
+				B267763A22C5D4A200AA657E /* revised.csv */,
+				B267763922C5C7BC00AA657E /* mini.csv */,
+			);
+			path = data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,7 +158,7 @@
 				B267764422C7409400AA657E /* noodle.swift in Sources */,
 				B267763E22C65ED200AA657E /* panagram.swift in Sources */,
 				B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */,
-				B267764022C6610400AA657E /* miniDict.swift in Sources */,
+				B267764022C6610400AA657E /* MiniArray.swift in Sources */,
 				B267763C22C5EE8B00AA657E /* consoleIO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

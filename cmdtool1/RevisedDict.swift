@@ -64,7 +64,7 @@ struct NoneProcessd:Codable{
             try data.write(to: url)
             print("\(fileName) saved")
         }else{
-            print("\(fileName) failed")
+            print("\(fileName ) failed")
         }
     }
 }
