@@ -30,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B266A72D22DD46C2005F3D00 /* toneFullHouseDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = toneFullHouseDict.json; sourceTree = "<group>"; };
 		B267762D22C5BA0D00AA657E /* cmdtool1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cmdtool1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B267763022C5BA0D00AA657E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		B267763922C5C7BC00AA657E /* mini.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mini.csv; sourceTree = "<group>"; };
@@ -92,6 +93,7 @@
 		B2F7043C22C9927200FCE837 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				B266A72D22DD46C2005F3D00 /* toneFullHouseDict.json */,
 				B2F7043D22C9939100FCE837 /* miniDict.json */,
 				B2F7043B22C9135200FCE837 /* revDict.json */,
 				B267763A22C5D4A200AA657E /* revised.csv */,

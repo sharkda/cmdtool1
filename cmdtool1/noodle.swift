@@ -271,6 +271,7 @@ class Noodle{
         let url1 = home.appendingPathComponent(file1)
         var zhuyinSet = Set<String>()
         var cmrSet = Set<String>()
+        var cmrArray = [String]()
         do{
             let text = try String(contentsOf: url1)
             var charPhones = [CharPhone]()
@@ -293,7 +294,7 @@ class Noodle{
                 }
                 //print("&charphone\(ch1) delta: \(zhuyinSet.count)")
             }
-            let array1 = MiniArray(charPhones)
+            let array1 = MiniArray(charPhones )
             let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
             let mini1 = PhoneDict(zhuyinDict)
             
@@ -317,14 +318,15 @@ class Noodle{
             let zy2CharsDict = ZyToChars(dictionary: zy2Chars)
             print("zhuyinset\(zhuyinSet.count) cmrset\(cmrSet.count)")
             var cmrFullHouseDict:[String:ToneFullHouse] = [String:ToneFullHouse]()
-            for cmr in cmrSet{
+            let cmrArray = cmrSet.sorted()
+            for cmr in cmrArray{
                 let arar = zy2CharsDict.get4ToneChars(cmr)
                 if arar[0].count > 0 && arar[1].count > 0 && arar[2].count > 0 && arar[3].count > 0 {
                     cmrFullHouseDict[cmr] = ToneFullHouse(charArry1:arar[0], charArry2: arar[1], charArry3: arar[2], charArry4: arar[3], phone: cmr)
                 }
             }
             print("@cmrFullHouseDict\(cmrFullHouseDict.count)")
-            let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict, cmrSet: cmrSet)
+            let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict, cmrArray: cmrArray)
             //let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict)
             do{
                 try zy2CharsDict.save("miniZy2Chars")

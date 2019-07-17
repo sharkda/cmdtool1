@@ -55,7 +55,8 @@ struct PhoneDict:Encodable{
 
 struct ToneFullHouseDict:Encodable{
     let dict:[String:ToneFullHouse]
-    let cmrSet:Set<String>
+    //let cmrSet:Set<String>
+    let cmrArray:[String]
     
     func removeTonefromZhuyin(_ zy1:String)->String?{
         var ar1:[Character] = Array(zy1)
