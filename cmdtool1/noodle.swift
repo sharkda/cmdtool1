@@ -261,7 +261,21 @@ class Noodle{
             _ = ar1.removeLast()
             return String(ar1)
         }else{
-            return zy1
+            //check first for .
+            let first = mpsArray.first
+            if first?.type == MpsType.tone{
+                var ar2 = [Character]()
+                for mps1 in mpsArray{
+                    if mps1.type == MpsType.tone{
+                        continue
+                    }else{
+                        ar2.append(mps1.zhuyin)
+                    }
+                }
+                return String(ar2)
+            }else{
+                return zy1
+            }
         }
     }
     
@@ -270,7 +284,7 @@ class Noodle{
         let file1 = "Desktop/zhuyin1.tsv"
         let url1 = home.appendingPathComponent(file1)
         var zhuyinSet = Set<String>()
-        var cmrSet = Set<String>()
+        var cmrSet = Set<String>() //use set to de-duplicate,
         var cmrArray = [String]()
         do{
             let text = try String(contentsOf: url1)
@@ -284,7 +298,7 @@ class Noodle{
                 let ch1:Character = Character(str1)
                 let delChar = CharacterSet.init(charactersIn:"\"")
                 let trim = cols[1].trimmingCharacters(in: delChar)
-                let zhuyins = trim.split(separator: "\n")
+                let zhuyins = trim.split(separator: "\n") //+= alternative pronouciation //po4yinzi
                 //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
                 charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
                 for zy in zhuyins{
@@ -299,9 +313,14 @@ class Noodle{
             let mini1 = PhoneDict(zhuyinDict)
             
             var zy2Chars = [String:[Character]]()
+            var zy2CharsNoAlt = [String:[Character]]()
             for zy in zhuyinSet{
                 var charArray = [Character]()
+                var charArrayNoAlt = [Character]() //no poyinzi
                 for charPhone1 in charPhones{
+                    if charPhone1.zhuyins[0] == zy {
+                        charArrayNoAlt.append(charPhone1.character)
+                    }
                     for zy1 in charPhone1.zhuyins{
                         if zy1 == zy {
                             charArray.append(charPhone1.character)
@@ -311,25 +330,33 @@ class Noodle{
                     }
                 }
                 if charArray.count > 0 {
-                    zy2Chars[zy] = charArray
+                    zy2Chars[zy] = charArray.sorted()
                     //print("&\(zy):\(charArray.count)")
                 }
+                if charArrayNoAlt.count > 0 {
+                    zy2CharsNoAlt[zy] = charArrayNoAlt.sorted()
+                }
+                //print("&zy=\(zy) noalt:\(charArrayNoAlt.count) wAlt:\(charArray.count)")
             }
             let zy2CharsDict = ZyToChars(dictionary: zy2Chars)
-            print("zhuyinset\(zhuyinSet.count) cmrset\(cmrSet.count)")
+            let zy2CharsDictNoAlt = ZyToChars(dictionary: zy2CharsNoAlt)
+            print("zhuyinset\(zy2Chars.count), noalt\(zy2CharsNoAlt.count) cmrset\(cmrSet.count)")
             var cmrFullHouseDict:[String:ToneFullHouse] = [String:ToneFullHouse]()
             let cmrArray = cmrSet.sorted()
+            var cmrArrayFhOnly = [String]()
             for cmr in cmrArray{
                 let arar = zy2CharsDict.get4ToneChars(cmr)
                 if arar[0].count > 0 && arar[1].count > 0 && arar[2].count > 0 && arar[3].count > 0 {
                     cmrFullHouseDict[cmr] = ToneFullHouse(charArry1:arar[0], charArry2: arar[1], charArry3: arar[2], charArry4: arar[3], phone: cmr)
+                    cmrArrayFhOnly.append(cmr)
                 }
             }
-            print("@cmrFullHouseDict\(cmrFullHouseDict.count)")
-            let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict, cmrArray: cmrArray)
+            print("@cmrFullHouseDict\(cmrFullHouseDict.count), cmrArray:\(cmrArray.count), cmrArrayFhOnly\(cmrArrayFhOnly.count)")
+            let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict, cmrArray: cmrArray, cmrArrayFyOnly: cmrArrayFhOnly)
             //let toneFh = ToneFullHouseDict(dict: cmrFullHouseDict)
             do{
                 try zy2CharsDict.save("miniZy2Chars")
+                try zy2CharsDictNoAlt.save("miniZy2CharsNoAlt")
                 try toneFh.save()
                 try array1.save()
                 try mini1.save("mini")

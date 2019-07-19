@@ -57,6 +57,7 @@ struct ToneFullHouseDict:Encodable{
     let dict:[String:ToneFullHouse]
     //let cmrSet:Set<String>
     let cmrArray:[String]
+    let cmrArrayFyOnly:[String]
     
     func removeTonefromZhuyin(_ zy1:String)->String?{
         var ar1:[Character] = Array(zy1)
@@ -67,7 +68,21 @@ struct ToneFullHouseDict:Encodable{
             _ = ar1.removeLast()
             return String(ar1)
         }else{
-            return zy1
+            //check first for .
+            let first = mpsArray.first
+            if first?.type == MpsType.tone{
+                var ar2 = [Character]()
+                for mps1 in mpsArray{
+                    if mps1.type == MpsType.tone{
+                        continue
+                    }else{
+                        ar2.append(mps1.zhuyin)
+                    }
+                }
+                return String(ar2)
+            }else{
+                return zy1
+            }
         }
     }
     
@@ -114,7 +129,21 @@ struct ZyToChars:Encodable{
             _ = ar1.removeLast()
             return String(ar1)
         }else{
-            return zy1
+            //check first for .
+            let first = mpsArray.first
+            if first?.type == MpsType.tone{
+                var ar2 = [Character]()
+                for mps1 in mpsArray{
+                    if mps1.type == MpsType.tone{
+                        continue
+                    }else{
+                        ar2.append(mps1.zhuyin)
+                    }
+                }
+                return String(ar2)
+            }else{
+                return zy1
+            }
         }
     }
     
