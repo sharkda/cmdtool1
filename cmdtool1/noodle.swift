@@ -345,7 +345,8 @@ class Noodle{
             let cmrArray = cmrSet.sorted()
             var cmrArrayFhOnly = [String]()
             for cmr in cmrArray{
-                let arar = zy2CharsDict.get4ToneChars(cmr)
+                //let arar = zy2CharsDict.get4ToneChars(cmr) //i will use no alt, outputcount = 124
+                let arar = zy2CharsDictNoAlt.get4ToneChars(cmr)
                 if arar[0].count > 0 && arar[1].count > 0 && arar[2].count > 0 && arar[3].count > 0 {
                     cmrFullHouseDict[cmr] = ToneFullHouse(charArry1:arar[0], charArry2: arar[1], charArry3: arar[2], charArry4: arar[3], phone: cmr)
                     cmrArrayFhOnly.append(cmr)
