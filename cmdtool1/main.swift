@@ -13,7 +13,8 @@ import Foundation
 ///jh:noodle is used to generate json file for dict. both 
     let noodle = Noodle()
     noodle.staticMode()
-
+    //let noodle2 = Noodle2()
+    //noodle2.staticMode()
 //let panagram = Panagram()
 //panagram.staticMode()
 

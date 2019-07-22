@@ -8,7 +8,7 @@
 class Panagram {
     
     let consoleIO = ConsoleIO()
-    let noodle = Noodle.shared
+    //let noodle = Noodle.shared
     
     func staticMode() {
         consoleIO.printUsage()

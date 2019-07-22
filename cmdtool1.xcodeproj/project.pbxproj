@@ -10,10 +10,10 @@
 		B267763122C5BA0D00AA657E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763022C5BA0D00AA657E /* main.swift */; };
 		B267763C22C5EE8B00AA657E /* consoleIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763B22C5EE8B00AA657E /* consoleIO.swift */; };
 		B267763E22C65ED200AA657E /* panagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763D22C65ED200AA657E /* panagram.swift */; };
-		B267764022C6610400AA657E /* MiniArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763F22C6610400AA657E /* MiniArray.swift */; };
 		B267764222C73D4600AA657E /* filePro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764122C73D4500AA657E /* filePro.swift */; };
-		B267764422C7409400AA657E /* noodle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764322C7409400AA657E /* noodle.swift */; };
 		B270A4A822DC814700842A17 /* mps-ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = B270A4A722DC814700842A17 /* mps-ref.swift */; };
+		B276301222E5FCF100B52E39 /* MiniArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267763F22C6610400AA657E /* MiniArray.swift */; };
+		B276301322E5FD1300B52E39 /* noodle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B267764322C7409400AA657E /* noodle.swift */; };
 		B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F7043922C8A46B00FCE837 /* RevisedDict.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B258AE0E22E46F34000998E9 /* Noodle2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Noodle2.swift; sourceTree = "<group>"; };
 		B266A72D22DD46C2005F3D00 /* toneFullHouseDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = toneFullHouseDict.json; sourceTree = "<group>"; };
 		B267762D22C5BA0D00AA657E /* cmdtool1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cmdtool1; sourceTree = BUILT_PRODUCTS_DIR; };
 		B267763022C5BA0D00AA657E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -42,6 +43,8 @@
 		B267764322C7409400AA657E /* noodle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = noodle.swift; sourceTree = "<group>"; };
 		B270A4A722DC814700842A17 /* mps-ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "mps-ref.swift"; sourceTree = "<group>"; };
 		B270A4A922DCBF2600842A17 /* miniZy2Chars.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = miniZy2Chars.json; sourceTree = "<group>"; };
+		B276300A22E5629100B52E39 /* Vocabulary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Vocabulary.swift; sourceTree = "<group>"; };
+		B276300C22E58D5D00B52E39 /* PhoneDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneDictionary.swift; sourceTree = "<group>"; };
 		B2F7043922C8A46B00FCE837 /* RevisedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisedDict.swift; sourceTree = "<group>"; };
 		B2F7043B22C9135200FCE837 /* revDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = revDict.json; sourceTree = "<group>"; };
 		B2F7043D22C9939100FCE837 /* miniDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
@@ -80,11 +83,14 @@
 				B267763022C5BA0D00AA657E /* main.swift */,
 				B267763D22C65ED200AA657E /* panagram.swift */,
 				B267764322C7409400AA657E /* noodle.swift */,
+				B258AE0E22E46F34000998E9 /* Noodle2.swift */,
 				B2F7043922C8A46B00FCE837 /* RevisedDict.swift */,
 				B267763F22C6610400AA657E /* MiniArray.swift */,
 				B267763B22C5EE8B00AA657E /* consoleIO.swift */,
+				B276300A22E5629100B52E39 /* Vocabulary.swift */,
 				B2F7043C22C9927200FCE837 /* data */,
 				B267764122C73D4500AA657E /* filePro.swift */,
+				B276300C22E58D5D00B52E39 /* PhoneDictionary.swift */,
 				B270A4A722DC814700842A17 /* mps-ref.swift */,
 			);
 			path = cmdtool1;
@@ -160,13 +166,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B276301322E5FD1300B52E39 /* noodle.swift in Sources */,
 				B267764222C73D4600AA657E /* filePro.swift in Sources */,
 				B267763122C5BA0D00AA657E /* main.swift in Sources */,
 				B270A4A822DC814700842A17 /* mps-ref.swift in Sources */,
-				B267764422C7409400AA657E /* noodle.swift in Sources */,
 				B267763E22C65ED200AA657E /* panagram.swift in Sources */,
 				B2F7043A22C8A46B00FCE837 /* RevisedDict.swift in Sources */,
-				B267764022C6610400AA657E /* MiniArray.swift in Sources */,
+				B276301222E5FCF100B52E39 /* MiniArray.swift in Sources */,
 				B267763C22C5EE8B00AA657E /* consoleIO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

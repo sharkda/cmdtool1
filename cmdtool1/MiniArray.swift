@@ -198,22 +198,39 @@ struct MiniArray:Encodable, Decodable{
     }
 }
 
-
-//MARK: decode extension will fail. so I change the scene to use string as internal storage
-extension Character: Codable {
-    public init(from decoder:Decoder) throws {
-        //print(decoder.codingPath)
-        let container = try decoder.singleValueContainer()
-        let s1 = try container.decode(String.self)
-        self = Character(s1)
-        return
-    }
+struct VocabularySets:Codable{
+    let s1:Set<Character>  //100
+    let s2:Set<Character>
     
-    
-    public func encode (to encoder: Encoder)throws{
-        //print("encodable encode")
-        let charString = String(self)
-        var container = encoder.singleValueContainer()
-        try container.encode(charString)
+    func save(_ name:String = "vocabulary" ) throws {
+        print("\(name) save()")
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try encoder.encode(self)
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(name).json"){
+            try data.write(to: url)
+            print("\(name) saved")
+        }else{
+            print("\(name) failed")
+        }
     }
 }
+
+////MARK: decode extension will fail. so I change the scene to use string as internal storage
+//extension Character: Codable {
+//    public init(from decoder:Decoder) throws {
+//        //print(decoder.codingPath)
+//        let container = try decoder.singleValueContainer()
+//        let s1 = try container.decode(String.self)
+//        self = Character(s1)
+//        return
+//    }
+//    
+//    
+//    public func encode (to encoder: Encoder)throws{
+//        //print("encodable encode")
+//        let charString = String(self)
+//        var container = encoder.singleValueContainer()
+//        try container.encode(charString)
+//    }
+//}

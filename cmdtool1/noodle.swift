@@ -5,6 +5,7 @@
 //  Created by Jim Hsu on 2019/6/29.
 //  Copyright © 2019 Tataro.com.tw. All rights reserved.
 // https://forums.developer.apple.com/thread/90293
+// 原文網址：https://kknews.cc/education/ovkp94q.html"]
 
 import Foundation
 
@@ -34,6 +35,7 @@ class Noodle{
         let lines = text.split(separator: "\r\n")
         for line in lines.enumerated(){
                 let cols = line.element.split(separator: "\t")
+                //print("\(cols[0]) \(cols.count)")
                 assert(cols.count == 2)
                 let str1:String = String(cols[0])
                 //print(str1)
@@ -220,11 +222,28 @@ class Noodle{
     //MARK:Entry point 
     func staticMode(){
         
+        //vocabulary1()
         toneMaker()
         
-        //desktop1()
-        //desktopRev()
+        desktop1()
+        desktopRev()
     }
+    
+    func vocabulary1(){
+        
+        let a1:[Character] = Array("一二三十木禾上下土個八入大天人火文六七兒九無口日中")
+        let a2:[Character] = Array("十木禾")
+        let s1:Set<Character> = Set(a1.map({$0}))
+        let s2:Set<Character> = Set(a2.map({$0}))
+        
+        let vs1 = VocabularySets(s1: s1, s2: s2)
+        do{
+            try vs1.save("vs1")
+        }catch{
+            print(error.localizedDescription)
+        }
+    }
+    
     //MARK: Desktopzhuyin1.tsv
     func desktopRev(){
         let home = FileManager.default.homeDirectoryForCurrentUser
@@ -390,5 +409,23 @@ class Noodle{
                 consoleIO.writeMessage("error processing: \(path): \(error)", to: .error)
             }
         }
+    }
+}
+
+extension Character: Codable {
+    public init(from decoder:Decoder) throws {
+        //print(decoder.codingPath)
+        let container = try decoder.singleValueContainer()
+        let s1 = try container.decode(String.self)
+        self = Character(s1)
+        return
+    }
+    
+    
+    public func encode (to encoder: Encoder)throws{
+        //print("encodable encode")
+        let charString = String(self)
+        var container = encoder.singleValueContainer()
+        try container.encode(charString)
     }
 }

@@ -58,6 +58,7 @@ extension Mps{
     static let aieiaoou:[Mps] = [.ai, .ei, .ao, .ou]
     static let anenangng:[Mps] = [.an, .en, .ang, .ng]
     static let tones4:[Mps] = [.t1, .t2, .t3, .t4]
+    static let independentConsonants:Set<Mps> = [.zh, .ch, .sh, .r, z, c, s]
 }
 
 enum MpsType: Int, Codable{
@@ -127,6 +128,7 @@ struct MpsSift{
 //new design phone is for combo only, and there will be tone.
 //tone.1 will be default if omitted
 // no init? from pinyin since we can always get it from zhuyin dict now. pinyin is not fixed lengh... and it varies.
+
 struct MpsPhone{
     
     let tone:Mps
@@ -168,7 +170,14 @@ struct MpsPhone{
         case 1: //no tone, tone = 1
             switch sift.getType(mps[0]){
             case .consonant:
-                return nil
+                if Mps.independentConsonants.contains(mps[0])
+                {
+                    consonant = mps[0]
+                    medial = nil
+                    rhyme = nil
+                }else{
+                    return nil
+                }
             case .rhyme:
                 consonant = nil
                 medial = nil
@@ -234,17 +243,20 @@ struct MpsPhone{
     }
     
 //    init?(_ word:Character){
-////        guard let mini = PhoneDict.mini?.dictionary else { print("!MiniZhuyin"); return nil }
-////        if let zhuyinAry = mini[word]{
-////            self.init(zhuyin:zhuyinAry[0])
-////            self.word = word
-////            if zhuyinAry.count > 1{
-////                self.alternativeZhuyin = zhuyinAry
-////            }
-////        }else{
-////            print("Mps.Init(\(word) failed")
-////            return nil
-////        }
+//        guard let mini = PhoneDict.mini else {
+//            print("\(DictSource.mini) failed to load"); return nil }
+//        let zhuyinAry = mini.getZhuyin(word)
+//        guard zhuyinAry.count > 0 else {
+//            print("No \(word) from \(DictSource.mini)"); return nil}
+//        self.init(zhuyin:zhuyinAry[0])
+//        self.word = word
+//        if zhuyinAry.count > 1{
+//            self.alternativeZhuyin = zhuyinAry
+//        }
 //    }
+    
+}
+
+extension MpsPhone{
     
 }
