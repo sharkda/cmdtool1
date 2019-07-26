@@ -327,6 +327,7 @@ class Noodle{
                 }
                 //print("&charphone\(ch1) delta: \(zhuyinSet.count)")
             }
+            //now that CMR set will be every distince CMR from mini. 
             let array1 = MiniArray(charPhones )
             let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
             let mini1 = PhoneDict(zhuyinDict)
