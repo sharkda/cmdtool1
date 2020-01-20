@@ -33,18 +33,20 @@ struct CharPhone: Codable {
 
 struct PhoneDict:Encodable{
     
+    //var path0:String = "OneDrive\farms\json"
+    
     let dictionary:[Character: [String]]
     
     init(_ dict:[Character:[String]]) {
         self.dictionary = dict
     }
     
-    func save(_ name:String = "zhuyin" ) throws {
-        print("\(name) save()")
+    func save(_ name:String = "zhuyin", path0:String = "OneDrive/farms/json/") throws {
+        print("\(path0)\(name) save()")
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let data = try encoder.encode(self)
-        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(name).json"){
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("\(path0)\(name).json"){
             try data.write(to: url)
             print("\(name) saved")
         }else{
@@ -182,7 +184,8 @@ struct MiniArray:Encodable, Decodable{
 
     init(_ cps:[CharPhone])
     {
-        charPhones = cps 
+        charPhones = cps
+        print("@MiniArray \(charPhones.count)")
     }
     func save() throws {
         print("miniArray.Save()")

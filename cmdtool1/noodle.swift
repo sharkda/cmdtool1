@@ -15,59 +15,177 @@ class Noodle{
     static let shared = Noodle()
     let consoleIO = ConsoleIO()
 
-    
-//    func json1(){
-//        let dict = miniDict([
-//            CharPhone("團", "ㄊㄨㄢˊ"),
-//            CharPhone("圓", "ㄩㄢˊ"),
-//            CharPhone("漂", ["ㄆㄧㄠ", "ㄆㄧㄠˇ","ㄆㄧㄠˋ"])
-//            ])
-//        do{
-//            try dict.save()
-//        }catch{
-//            print(error.localizedDescription)
-//        }
-//    }
-    
+    //MARK:Entry point
+    func staticMode(){
+        
+        //self.miniTsv2Json() //desktop1()
+        self.revTsv2Json() //desktopRev()
+    }
+    fileprivate func processSimp(_ text:String){
+        //print(text)
+               var charPhones = [CharPhone]()
+               let lines = text.components(separatedBy: ["\r","\n"])
+               print("@noodle ->process() \(lines.count)")
+               var i0 = 0
+               for line in lines.enumerated(){
+                       
+                let cols = line.element.components(separatedBy:"    ")
+                   print("\(i0):\(cols[0]) \(cols.count)")
+                   if cols.count != 2 {
+                    print("cols count = \(cols.count) \(cols.joined())")
+                        continue
+                    }
+                   let str1:String = String(cols[0])
+                   //print(str1)
+                   let ch1:Character = Character(str1)
+                   let delChar = CharacterSet.init(charactersIn:"\"")
+                   let trim = cols[1].trimmingCharacters(in: delChar)
+                   let zhuyins = trim.split(separator: "\n")
+                   //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
+                   charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+                   i0 += 1
+               }
+               let array1 = MiniArray(charPhones)
+               let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
+               let mini1 = PhoneDict(zhuyinDict)
+               do{
+                   try array1.save()
+                   try mini1.save("mini-s")
+               }catch{
+                   consoleIO.writeMessage(error.localizedDescription, to: .error)
+               }
+    }
     func process(_ text:String) throws {
         //print(text)
         var charPhones = [CharPhone]()
-        let lines = text.split(separator: "\r\n")
+        let lines = text.split(separator: "\r\n") //"\r\n"
+        print("@noodle ->process() \(lines.count)")
+        var i0 = 0
         for line in lines.enumerated(){
-                let cols = line.element.split(separator: "\t")
-                //print("\(cols[0]) \(cols.count)")
-                assert(cols.count == 2)
-                let str1:String = String(cols[0])
-                //print(str1)
-                let ch1:Character = Character(str1)
-                let delChar = CharacterSet.init(charactersIn:"\"")
-                let trim = cols[1].trimmingCharacters(in: delChar)
-                let zhuyins = trim.split(separator: "\n")
-                //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
-                charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+                
+            let cols = line.element.split(separator: "\t")
+            print("\(i0):\(cols[0]) \(cols.count)")
+            if cols.count != 2 {
+                break
+            }
+            let str1:String = String(cols[0])
+            //print(str1)
+            let ch1:Character = Character(str1)
+            let delChar = CharacterSet.init(charactersIn:"\"")
+            let trim = cols[1].trimmingCharacters(in: delChar)
+            let zhuyins = trim.split(separator: "\n")
+            //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
+            charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+            i0 += 1
         }
         let array1 = MiniArray(charPhones)
         let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
         let mini1 = PhoneDict(zhuyinDict)
         do{
             try array1.save()
-            try mini1.save("mini")
+            try mini1.save("mini-s")
         }catch{
             consoleIO.writeMessage(error.localizedDescription, to: .error)
         }
     }
     
-    
-    func processFile(at url: URL) throws{
+    fileprivate func processMiniSim(at url:URL) throws{
         let s = try String(contentsOf: url)
+        try processSimp(s)
+    }
+    
+    func processMini(at url: URL) throws{
+        
+        let s = try String(contentsOf: url)
+        //print("@processMin s=\(s)")
         try process(s)
     }
     
     func trimRev(_ text:String) -> String{
-        let delChar = CharacterSet.init(charactersIn:" (一) (二) (三) (四) （又音） (語音) (讀音）")
+        let delChar = CharacterSet.init(charactersIn:" (一) (二) (叁) (三) (四) 五) （又音）（又音） (語音) 语音） 读音）  (讀音）")
         return text.trimmingCharacters(in: delChar)
     }
     
+    fileprivate func processRevSimp(at url: URL) throws{
+            let text = try String(contentsOf: url)
+            print("rev")
+            var invalids = [String]()
+            var rev0s = [CharPhone2]()
+            var rev1s = [CharPhone2]() // new
+            var revXs = [CharPhone2]()
+            let lines = text.split(separator: "\n")
+            for line in lines.enumerated(){
+               
+                let cols = line.element.components(separatedBy: "    ")
+                //print("\(String(line.element))--\(cols.count)")
+                if cols.count != 4{
+                    break
+                }
+                //print("\(cols[1])  \(cols[2]) \(cols[3])")
+                if String(cols[1]).hasPrefix("&")
+                {
+                    //print("hasprefix(&)\(cols[1])")
+                    let raw = String(line.element)
+                    invalids.append(raw)
+                }else{
+                    let zy = String(cols[2])
+                    let py = String(cols[3])
+                    let no:Int = Int(String(cols[0])) ?? 0
+                    let zy1 = trimRev(zy)
+                    let py1 = trimRev(py)
+                    let cp2 = CharPhone2(Character(String(cols[1])), zy1, py1, no)
+                    if String(cols[2]).hasPrefix("("){
+                        if String(cols[2]).hasPrefix("(一)"){
+                            rev1s.append(cp2)
+                        }else{
+                            revXs.append(cp2)
+                        }
+                    }else{
+                         let cp2 = CharPhone2(Character(String(cols[1])), zy, py, no)
+                        rev0s.append(cp2)
+                    }
+                }
+            }
+            //let invalid:NoneProcessd = NoneProcessd(leftover: invalids, fileName: "invalid")
+            //let rev0:RevisedDict = RevisedDict(rev0s, "rev0")
+            let count0 = rev0s.count
+            //let rev1:RevisedDict = RevisedDict(rev1s, "rev1")
+            //let revX:RevisedDict = RevisedDict(revXs, "revX")
+            let countx = revXs.count
+            //let revMultList = mapReduce(revXs)
+            let revMultList = BaseAndAlt(rev1s, revXs)
+            let countXReduced = revMultList.count
+            let revMulti:RevisedDict = RevisedDict(revMultList,"revMultis")
+            
+            rev0s.append(contentsOf: revMultList)
+            print("dictCount: \(count0) + \(countx)::\(countXReduced) rev0s\(rev0s.count)")
+            //let revArray:RevisedDict = RevisedDict(rev0s, "revDict")
+            
+            //let array1 = MiniArray(charPhones)
+            //let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
+            let revMultiZhuyin = Dictionary(uniqueKeysWithValues: revMultList.map({($0.character, $0.zhuyins)}))
+            let revMultiZhuyinDict = PhoneDict(revMultiZhuyin)
+            let zhuyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.zhuyins)}))
+            let revZhuyin = PhoneDict(zhuyinDict)
+            let pinyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.pinyins)}))
+            let revPinyin = PhoneDict(pinyinDict)
+    //        let dict1 = miniDict(charPhones)
+            do{
+    //            try dict1.save()
+    //              try invalid.save()
+    //              try rev0.save()
+    //              //try rev1.save()
+    //              try revX.save()
+    //              try revMulti.save()
+    //              try revArray.save()
+                    try revZhuyin.save("RevZhuyin")
+                    try revPinyin.save("RevPinyin")
+                    try revMultiZhuyinDict.save("revMultiZhuyin")
+                
+            }catch{
+                consoleIO.writeMessage(error.localizedDescription, to: .error)
+            }
+        }
     /*
      Only 1 arrays of RevX (all 1,2,3,4 or 4+)
      
@@ -76,9 +194,9 @@ class Noodle{
      //[“char1”: [charphone2, charphone2,…]]
      need to reduce that into one charphone2
     */
-    func processRev(at url: URL) throws{
+    fileprivate func processRevTrad(at url: URL) throws{
         let text = try String(contentsOf: url)
-        //var charPhones = [CharPhone]()
+        print("rev")
         var invalids = [String]()
         var rev0s = [CharPhone2]()
         var rev1s = [CharPhone2]() // new
@@ -88,7 +206,9 @@ class Noodle{
            
             let cols = line.element.split(separator: "\t")
             //print("\(String(line.element))--\(cols.count)")
-            assert(cols.count == 4)
+            if cols.count != 4{
+                break
+            }
             //print("\(cols[1])  \(cols[2]) \(cols[3])")
             if String(cols[1]).hasPrefix("&")
             {
@@ -123,7 +243,7 @@ class Noodle{
         //let revMultList = mapReduce(revXs)
         let revMultList = BaseAndAlt(rev1s, revXs)
         let countXReduced = revMultList.count
-        let revMulti:RevisedDict = RevisedDict(revMultList,"revMulti")
+        let revMulti:RevisedDict = RevisedDict(revMultList,"revMultis")
         
         rev0s.append(contentsOf: revMultList)
         print("dictCount: \(count0) + \(countx)::\(countXReduced) rev0s\(rev0s.count)")
@@ -219,59 +339,72 @@ class Noodle{
         consoleIO.writeMessage("fin")
     }
     
-    //MARK:Entry point 
-    func staticMode(){
-        
-        //vocabulary1()
-        toneMaker()
-        
-        desktop1()
-        desktopRev()
-    }
     
-    func vocabulary1(){
-        
-        let a1:[Character] = Array("一二三十木禾上下土個八入大天人火文六七兒九無口日中")
-        let a2:[Character] = Array("十木禾")
-        let s1:Set<Character> = Set(a1.map({$0}))
-        let s2:Set<Character> = Set(a2.map({$0}))
-        
-        let vs1 = VocabularySets(s1: s1, s2: s2)
-        do{
-            try vs1.save("vs1")
-        }catch{
-            print(error.localizedDescription)
-        }
-    }
-    
-    //MARK: Desktopzhuyin1.tsv
-    func desktopRev(){
+    fileprivate func revTsv2Json(_ sourcePath:String = "Documents/OneDrive/farms/bobo-s/dictRev.tsv"){
         let home = FileManager.default.homeDirectoryForCurrentUser
-        let file1 = "Desktop/dictRev.tsv"
-        let url1 = home.appendingPathComponent(file1)
+        let url0 = home.appendingPathComponent(sourcePath)
         do{
-            try processRev(at: url1)
+            try processRevSimp(at:url0) //trad will need to go trad!
         }catch{
-            consoleIO.writeMessage("error processing: \(url1): \(error)", to: .error)
+            consoleIO.writeMessage("\(url0):\(error)", to:.error)
         }
     }
     
-    //MARK:1. char-zhuyin, normalized, 1-M -> 1-1, step2: generat the bag of zhuyin , step3, generate the dict of zhuyin to char, step 4, need a func that can return a structure of the same zhuyin with various tones and the arry of each tones...
-    
-    
-    //MARK: Desktopzhuyin1.tsv
-    func desktop1(){
+    //MARK:miniSim is revised from desktop1 read from the tsv and generate the json file
+    fileprivate func miniTsv2Json(_ sourcePath:String = "Documents/OneDrive/farms/bobo-s/zhuyin1.tsv"){
         let home = FileManager.default.homeDirectoryForCurrentUser
-        let file1 = "Desktop/zhuyin1.tsv"
-        let url1 = home.appendingPathComponent(file1)
+        let url0 = home.appendingPathComponent(sourcePath)
         do{
-            try processFile(at: url1)
+            //try processMini(at:url0)
+            try processMiniSim(at: url0)
         }catch{
-             consoleIO.writeMessage("error processing: \(url1): \(error)", to: .error)
+            consoleIO.writeMessage("@miniTsv2Json Error  \(url0):\(error)", to:.error)
         }
     }
     
-    func removeTonefromZhuyin(_ zy1:String)->String?{
+//    //MARK: Desktopzhuyin1.tsv
+//      fileprivate func desktopRev(){
+//          let home = FileManager.default.homeDirectoryForCurrentUser
+//          let file1 = "Desktop/dictRev.tsv"
+//          let url1 = home.appendingPathComponent(file1)
+//          do{
+//              try processRev(at: url1)
+//          }catch{
+//              consoleIO.writeMessage("error processing: \(url1): \(error)", to: .error)
+//          }
+//      }
+    
+    
+//     //MARK:1. char-zhuyin, normalized, 1-M -> 1-1, step2: generat the bag of zhuyin , step3, generate the dict of zhuyin to char, step 4, need a func that can return a structure of the same zhuyin with various tones and the arry of each tones...
+//    fileprivate func vocabulary1(){
+//
+//        let a1:[Character] = Array("一二三十木禾上下土個八入大天人火文六七兒九無口日中")
+//        let a2:[Character] = Array("十木禾")
+//        let s1:Set<Character> = Set(a1.map({$0}))
+//        let s2:Set<Character> = Set(a2.map({$0}))
+//
+//        let vs1 = VocabularySets(s1: s1, s2: s2)
+//        do{
+//            try vs1.save("vs1")
+//        }catch{
+//            print(error.localizedDescription)
+//        }
+//    }
+    
+    
+//    //MARK: Desktopzhuyin1.tsv
+//    fileprivate func desktop1(){
+//        let home = FileManager.default.homeDirectoryForCurrentUser
+//        let file1 = "Desktop/zhuyin1.tsv"
+//        let url1 = home.appendingPathComponent(file1)
+//        do{
+//            try processFile(at: url1)
+//        }catch{
+//             consoleIO.writeMessage("error processing: \(url1): \(error)", to: .error)
+//        }
+//    }
+    //called by toneMaker
+    fileprivate func removeTonefromZhuyin(_ zy1:String)->String?{
         var ar1:[Character] = Array(zy1)
         let mpsArray:[Mps] = ar1.compactMap({Mps($0)})
         guard mpsArray.count > 0 && mpsArray.count < 5 else {return nil}
@@ -298,7 +431,7 @@ class Noodle{
         }
     }
     
-    func toneMaker(){
+    func MOtoneMaker(){
         let home = FileManager.default.homeDirectoryForCurrentUser
         let file1 = "Desktop/zhuyin1.tsv"
         let url1 = home.appendingPathComponent(file1)
@@ -405,7 +538,7 @@ class Noodle{
         for path in CommandLine.arguments[1...] {
             do {
                 let u = URL(fileURLWithPath: path)
-                try processFile(at: u)
+                try processMini(at: u)
             } catch {
                 consoleIO.writeMessage("error processing: \(path): \(error)", to: .error)
             }
