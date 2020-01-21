@@ -1,20 +1,19 @@
 //
-//  Noodle2.swift
+//  noodle222.swift
 //  cmdtool1
 //
-//  Created by Jim Hsu on 2019/7/21.
-//  Copyright © 2019 Tataro.com.tw. All rights reserved.
+//  Created by Jim Hsu on 2020/1/21.
+//  Copyright © 2020 Tataro.com.tw. All rights reserved.
 //
-
 import Foundation
 
-class Noodle2{
+class Noodle222{
     
-    static let shared = Noodle2()
+    static let shared = Noodle222()
     let consoleIO = ConsoleIO()
     
-    func staticMode(){
-        //e12Text()
+    func go(){
+        e12Text()
         IterateMps()
     }
     
@@ -25,8 +24,11 @@ class Noodle2{
         }
     }
     
+    init() {
+
+    }
     
-    func e12Text(){
+    fileprivate func e12Text(){
         guard let raw:String = openDeskTopTextFile("e12.txt") else { return }
         let cleansed:String = raw.remove(noiseSet)
         //print(cleansed)
@@ -81,3 +83,4 @@ extension String{
         return String(cleansed)
     }
 }
+

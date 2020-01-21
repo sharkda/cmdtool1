@@ -25,7 +25,7 @@ class Noodle{
         //print(text)
                var charPhones = [CharPhone]()
                let lines = text.components(separatedBy: ["\r","\n"])
-               print("@noodle ->process() \(lines.count)")
+               print("@noodle ->process() #linesCount  \(lines.count)")
                var i0 = 0
                for line in lines.enumerated(){
                        
@@ -102,24 +102,27 @@ class Noodle{
     }
     
     func trimRev(_ text:String) -> String{
-        let delChar = CharacterSet.init(charactersIn:" (一) (二) (叁) (三) (四) 五) （又音）（又音） (語音) 语音） 读音）  (讀音）")
+        let delChar = CharacterSet.init(charactersIn:" (一) (二) (叁) (三) (四) (五) （又音）（又音） (语音）（读音")
         return text.trimmingCharacters(in: delChar)
     }
-    
+    //MARK:process RevDict-Simple
     fileprivate func processRevSimp(at url: URL) throws{
+            //let path0 = ""
             let text = try String(contentsOf: url)
-            print("rev")
+            //print("rev")
             var invalids = [String]()
             var rev0s = [CharPhone2]()
             var rev1s = [CharPhone2]() // new
             var revXs = [CharPhone2]()
             let lines = text.split(separator: "\n")
+            print("@noodle -> processRevSimp # = \(lines.count )")
             for line in lines.enumerated(){
                
                 let cols = line.element.components(separatedBy: "    ")
                 //print("\(String(line.element))--\(cols.count)")
                 if cols.count != 4{
-                    break
+                    print("! cols.Count = \(cols.count), value \(cols.joined())")
+                    continue
                 }
                 //print("\(cols[1])  \(cols[2]) \(cols[3])")
                 if String(cols[1]).hasPrefix("&")
@@ -178,9 +181,9 @@ class Noodle{
     //              try revX.save()
     //              try revMulti.save()
     //              try revArray.save()
-                    try revZhuyin.save("RevZhuyin")
-                    try revPinyin.save("RevPinyin")
-                    try revMultiZhuyinDict.save("revMultiZhuyin")
+                    try revZhuyin.save("RevZhuyin-s")
+                    try revPinyin.save("RevPinyin-s")
+                    try revMultiZhuyinDict.save("revMultiZhuyin-s")
                 
             }catch{
                 consoleIO.writeMessage(error.localizedDescription, to: .error)
