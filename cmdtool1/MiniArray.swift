@@ -6,7 +6,7 @@
 //  Copyright © 2019 Tataro.com.tw. All rights reserved.
 import Foundation
 
-struct CharPhone: Codable {
+struct CharPhone01: Codable {
     let character: Character
     let zhuyins:[String]
     
@@ -180,9 +180,9 @@ struct ZyToChars:Encodable{
 
 
 struct MiniArray:Encodable, Decodable{
-    var charPhones = [CharPhone]()
+    var charPhones = [CharPhone01]()
 
-    init(_ cps:[CharPhone])
+    init(_ cps:[CharPhone01])
     {
         charPhones = cps
         print("@MiniArray \(charPhones.count)")

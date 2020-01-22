@@ -23,7 +23,7 @@ class Noodle{
     }
     fileprivate func processSimp(_ text:String){
         //print(text)
-               var charPhones = [CharPhone]()
+               var charPhones = [CharPhone01]()
                let lines = text.components(separatedBy: ["\r","\n"])
                print("@noodle ->process() #linesCount  \(lines.count)")
                var i0 = 0
@@ -42,7 +42,7 @@ class Noodle{
                    let trim = cols[1].trimmingCharacters(in: delChar)
                    let zhuyins = trim.split(separator: "\n")
                    //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
-                   charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+                   charPhones.append(CharPhone01(ch1, zhuyins.compactMap({String($0)})))
                    i0 += 1
                }
                let array1 = MiniArray(charPhones)
@@ -57,7 +57,7 @@ class Noodle{
     }
     func process(_ text:String) throws {
         //print(text)
-        var charPhones = [CharPhone]()
+        var charPhones = [CharPhone01]()
         let lines = text.split(separator: "\r\n") //"\r\n"
         print("@noodle ->process() \(lines.count)")
         var i0 = 0
@@ -75,7 +75,7 @@ class Noodle{
             let trim = cols[1].trimmingCharacters(in: delChar)
             let zhuyins = trim.split(separator: "\n")
             //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
-            charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+            charPhones.append(CharPhone01(ch1, zhuyins.compactMap({String($0)})))
             i0 += 1
         }
         let array1 = MiniArray(charPhones)
@@ -88,7 +88,7 @@ class Noodle{
             consoleIO.writeMessage(error.localizedDescription, to: .error)
         }
     }
-    
+    //MARK:Mini!
     fileprivate func processMiniSim(at url:URL) throws{
         let s = try String(contentsOf: url)
         try processSimp(s)
@@ -105,29 +105,63 @@ class Noodle{
         let delChar = CharacterSet.init(charactersIn:" (一) (二) (叁) (三) (四) (五) （又音）（又音） (语音）（读音")
         return text.trimmingCharacters(in: delChar)
     }
+    fileprivate var rev0s = [CharPhone]()
+    //this func assume 1: only 4 elements in cols(1 set of zy, py) each line, 2: only 1 occurance, since our algorithm will eliminate any duplication stays... we merge while we append....
+    fileprivate func dupRollUp(cp0:CharPhone){
+//        let cp1s = rev0s.filter({$0.character == cp0.character})
+//        guard cp1s.count == 1 else {fatalError()}
+        guard let i0 = rev0s.firstIndex(where: {$0.character == cp0.character}) else {fatalError()}
+        var cp1 = rev0s.remove(at: i0)
+        cp1.zhuyins.append(cp0.zhuyins[0]); cp1.pinyins.append(cp0.pinyins[0])//since all are 4 elements!
+        print("@dupRollup \(cp1.character) \(cp1.zhuyins.count)")
+        rev0s.append(cp1)
+    }
+    //MARK:revSimpRollUp!
+    fileprivate func revSimpRollup(at url0:URL) throws{
+        let text = try String(contentsOf: url0)
+        var invalids = [String]()
+        let lines = text.split(separator: "\n")
+        print("@RevSimpRollup #\(lines.count)")
+        var dupCount:Int = 0; rev0s.removeAll()
+        for (index, element) in lines.enumerated(){
+            let cols = element.components(separatedBy: "    ")
+            if cols.count != 4{ print("! cols.count = \(cols.count), value \(cols.joined())"); fatalError()} //no need since it is cleared, so...
+            if String(cols[1]).hasPrefix("&"){let raw0=String(element);invalids.append(raw0); continue}
+            let char0 = Character(cols[1]), zy = trimRev(String(cols[2])), py = trimRev(String(cols[3])), number:Int = Int(String(cols[0])) ?? 0
+            let cp0 = CharPhone(char0, zy, py, number)
+            if rev0s.filter({$0.character == char0}).count > 0{
+                //print("@revSimpRollup->dup:\(char0)");
+                dupCount += 1; dupRollUp(cp0:cp0); continue}
+            rev0s.append(cp0)
+        }
+        let zhuyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.zhuyins)}))
+        let revZhuyin = PhoneDict(zhuyinDict)
+        let pinyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.pinyins)}))
+        let revPinyin = PhoneDict(pinyinDict)
+        do{
+            try revZhuyin.save("RevZhuyin-s")
+            try revPinyin.save("RevPinyin-s")
+        }catch{
+            consoleIO.writeMessage(error.localizedDescription, to: .error)
+        }
+        print("@revSimpRollup invalids; dup \(dupCount),over\(rev0s.count) , invalid(&): \(invalids.count)")
+    }
     //MARK:process RevDict-Simple
     fileprivate func processRevSimp(at url: URL) throws{
-            //let path0 = ""
             let text = try String(contentsOf: url)
-            //print("rev")
             var invalids = [String]()
-            var rev0s = [CharPhone2]()
-            var rev1s = [CharPhone2]() // new
-            var revXs = [CharPhone2]()
+            var rev0s = [CharPhone]() //re0 base, no alt
+            var rev1s = [CharPhone]() //rv1, 1st alt.
+            let revXs = [CharPhone]()  //multiple alt
             let lines = text.split(separator: "\n")
-            print("@noodle -> processRevSimp # = \(lines.count )")
+            print("@noodle -> processRevSimp # \(url) = \(lines.count )")
             for line in lines.enumerated(){
-               
                 let cols = line.element.components(separatedBy: "    ")
-                //print("\(String(line.element))--\(cols.count)")
                 if cols.count != 4{
                     print("! cols.Count = \(cols.count), value \(cols.joined())")
-                    continue
                 }
-                //print("\(cols[1])  \(cols[2]) \(cols[3])")
                 if String(cols[1]).hasPrefix("&")
                 {
-                    //print("hasprefix(&)\(cols[1])")
                     let raw = String(line.element)
                     invalids.append(raw)
                 }else{
@@ -136,15 +170,25 @@ class Noodle{
                     let no:Int = Int(String(cols[0])) ?? 0
                     let zy1 = trimRev(zy)
                     let py1 = trimRev(py)
-                    let cp2 = CharPhone2(Character(String(cols[1])), zy1, py1, no)
+                    if String(cols[1]) == "蜡"{
+                        print("\(cols[0])-\(cols[1])-\(zy1)-\(py1)--\(cols.count)")
+                    }
+                    let cp2 = CharPhone(Character(String(cols[1])), zy1, py1, no)
                     if String(cols[2]).hasPrefix("("){
                         if String(cols[2]).hasPrefix("(一)"){
                             rev1s.append(cp2)
                         }else{
-                            revXs.append(cp2)
+                            rev1s.append(cp2)
                         }
+                    }else if rev0s.filter({$0.character == cp2.character}).count > 0{
+                        print("@processRevSimp #rev0s duplicated in \(cp2.character)")
+                    }else if rev1s.filter({$0.character == cp2.character}).count > 0 {
+                        print("@processRevSimp #rev1s duplicated in \(cp2.character)")
+//                    }else if revXs.filter({$0.character == cp2.character}).count > 0{
+//                        print("@processRevSimp #revxs duplicated in \(cp2.character)")
                     }else{
-                         let cp2 = CharPhone2(Character(String(cols[1])), zy, py, no)
+                        //print("\(cp2.character)")
+                         let cp2 = CharPhone(Character(String(cols[1])), zy, py, no)
                         rev0s.append(cp2)
                     }
                 }
@@ -154,21 +198,18 @@ class Noodle{
             let count0 = rev0s.count
             //let rev1:RevisedDict = RevisedDict(rev1s, "rev1")
             //let revX:RevisedDict = RevisedDict(revXs, "revX")
-            let countx = revXs.count
+            //let count1 = rev1.count
+            //let countx = revXs.count
             //let revMultList = mapReduce(revXs)
             let revMultList = BaseAndAlt(rev1s, revXs)
             let countXReduced = revMultList.count
             let revMulti:RevisedDict = RevisedDict(revMultList,"revMultis")
             
             rev0s.append(contentsOf: revMultList)
-            print("dictCount: \(count0) + \(countx)::\(countXReduced) rev0s\(rev0s.count)")
-            //let revArray:RevisedDict = RevisedDict(rev0s, "revDict")
-            
-            //let array1 = MiniArray(charPhones)
-            //let zhuyinDict = Dictionary(uniqueKeysWithValues: array1.charPhones.map{($0.character, $0.zhuyins)})
+
             let revMultiZhuyin = Dictionary(uniqueKeysWithValues: revMultList.map({($0.character, $0.zhuyins)}))
             let revMultiZhuyinDict = PhoneDict(revMultiZhuyin)
-            let zhuyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.zhuyins)}))
+             let zhuyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.zhuyins)}))
             let revZhuyin = PhoneDict(zhuyinDict)
             let pinyinDict = Dictionary(uniqueKeysWithValues: rev0s.map({($0.character, $0.pinyins)}))
             let revPinyin = PhoneDict(pinyinDict)
@@ -201,9 +242,9 @@ class Noodle{
         let text = try String(contentsOf: url)
         print("rev")
         var invalids = [String]()
-        var rev0s = [CharPhone2]()
-        var rev1s = [CharPhone2]() // new
-        var revXs = [CharPhone2]()
+        var rev0s = [CharPhone]()
+        var rev1s = [CharPhone]() // new
+        var revXs = [CharPhone]()
         let lines = text.split(separator: "\r\n")
         for line in lines.enumerated(){
            
@@ -224,7 +265,7 @@ class Noodle{
                 let no:Int = Int(String(cols[0])) ?? 0
                 let zy1 = trimRev(zy)
                 let py1 = trimRev(py)
-                let cp2 = CharPhone2(Character(String(cols[1])), zy1, py1, no)
+                let cp2 = CharPhone(Character(String(cols[1])), zy1, py1, no)
                 if String(cols[2]).hasPrefix("("){
                     if String(cols[2]).hasPrefix("(一)"){
                         rev1s.append(cp2)
@@ -232,7 +273,7 @@ class Noodle{
                         revXs.append(cp2)
                     }
                 }else{
-                     let cp2 = CharPhone2(Character(String(cols[1])), zy, py, no)
+                     let cp2 = CharPhone(Character(String(cols[1])), zy, py, no)
                     rev0s.append(cp2)
                 }
             }
@@ -277,11 +318,11 @@ class Noodle{
             consoleIO.writeMessage(error.localizedDescription, to: .error)
         }
     }
-    func BaseAndAlt(_ rev1:[CharPhone2], _ revx:[CharPhone2]) -> [CharPhone2]{
+    func BaseAndAlt(_ rev1:[CharPhone], _ revx:[CharPhone]) -> [CharPhone]{
         let dict1 = Dictionary(grouping: rev1, by: {$0.character})
         let dictX = Dictionary(grouping: revx, by:{$0.character})
         print("dict1 \(dict1.count); dictX \(dictX.count)")
-        var cpx = [CharPhone2]()
+        var cpx = [CharPhone]()
         for (char, cps) in dict1{
             var zhy = [String]()
             var pny = [String]()
@@ -298,15 +339,15 @@ class Noodle{
                     num.append(contentsOf: cp2.refs)
                 }
             }
-            cpx.append(CharPhone2(char, zhy, pny, num))
+            cpx.append(CharPhone(char, zhy, pny, num))
         }
         return cpx
     }
     
-    func mapReduce(_ revXs:[CharPhone2]) -> [CharPhone2]{
+    func mapReduce(_ revXs:[CharPhone]) -> [CharPhone]{
         let dict = Dictionary(grouping: revXs, by: {$0.character})
         print("mapReduce()-revXs \(dict.count)")
-        var cpx = [CharPhone2]()
+        var cpx = [CharPhone]()
         for (char, cps ) in dict{
             //print("char:\(char) \(cps.count)")
             var zhy = [String]()
@@ -317,7 +358,7 @@ class Noodle{
                 pny.append(cp2.pinyins[0])
                 num.append(cp2.refs[0])
             }
-            cpx.append(CharPhone2(char, zhy, pny, num))
+            cpx.append(CharPhone(char, zhy, pny, num))
         }
         return cpx
     }
@@ -346,8 +387,10 @@ class Noodle{
     fileprivate func revTsv2Json(_ sourcePath:String = "Documents/OneDrive/farms/bobo-s/dictRev.tsv"){
         let home = FileManager.default.homeDirectoryForCurrentUser
         let url0 = home.appendingPathComponent(sourcePath)
+        print("@revTsv2Json \(url0)")
         do{
-            try processRevSimp(at:url0) //trad will need to go trad!
+            //try processRevSimp(at:url0) //trad will need to go trad!
+            try revSimpRollup(at: url0)
         }catch{
             consoleIO.writeMessage("\(url0):\(error)", to:.error)
         }
@@ -443,7 +486,7 @@ class Noodle{
         var cmrArray = [String]()
         do{
             let text = try String(contentsOf: url1)
-            var charPhones = [CharPhone]()
+            var charPhones = [CharPhone01]()
             let lines = text.split(separator: "\r\n")
             for line in lines.enumerated(){
                 let cols = line.element.split(separator: "\t")
@@ -455,7 +498,7 @@ class Noodle{
                 let trim = cols[1].trimmingCharacters(in: delChar)
                 let zhuyins = trim.split(separator: "\n") //+= alternative pronouciation //po4yinzi
                 //print("\(trim) --- \(zhuyins) \(zhuyins.count)")
-                charPhones.append(CharPhone(ch1, zhuyins.compactMap({String($0)})))
+                charPhones.append(CharPhone01(ch1, zhuyins.compactMap({String($0)})))
                 for zy in zhuyins{
                     zhuyinSet.insert(String(zy))
                     let cmr = removeTonefromZhuyin(String(zy))

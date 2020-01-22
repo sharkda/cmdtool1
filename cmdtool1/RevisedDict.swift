@@ -7,11 +7,11 @@
 //
 
 import Foundation
-
-struct CharPhone2: Codable, Hashable {
+///zy and PY are arrays. 
+struct CharPhone: Codable, Hashable {
     let character: Character
-    let zhuyins:[String]
-    let pinyins:[String]
+    var zhuyins:[String]
+    var pinyins:[String]
     let refs:[Int]
     
     init( _ char: Character, _ zhuyin1:String, _ pinyin1:String, _ number:Int){
@@ -71,10 +71,10 @@ struct NoneProcessd:Codable{
 
 struct RevisedDict:Codable{
     
-    var charPhones = [CharPhone2]()
+    var charPhones = [CharPhone]()
     let name:String
     
-    init(_ cps:[CharPhone2], _ name:String)
+    init(_ cps:[CharPhone], _ name:String)
     {
         charPhones = cps
         self.name = name
