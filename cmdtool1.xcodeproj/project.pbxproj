@@ -47,6 +47,8 @@
 		B2F7043922C8A46B00FCE837 /* RevisedDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevisedDict.swift; sourceTree = "<group>"; };
 		B2F7043B22C9135200FCE837 /* revDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = revDict.json; sourceTree = "<group>"; };
 		B2F7043D22C9939100FCE837 /* miniDict.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = miniDict.json; sourceTree = "<group>"; };
+		B2FE8C5323D8497100C0F401 /* RevPinyin-s.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "RevPinyin-s.json"; sourceTree = "<group>"; };
+		B2FE8C5423D8497200C0F401 /* RevZhuyin-s.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "RevZhuyin-s.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,8 @@
 		B2F7043C22C9927200FCE837 /* data */ = {
 			isa = PBXGroup;
 			children = (
+				B2FE8C5323D8497100C0F401 /* RevPinyin-s.json */,
+				B2FE8C5423D8497200C0F401 /* RevZhuyin-s.json */,
 				B266A72D22DD46C2005F3D00 /* toneFullHouseDict.json */,
 				B2F7043D22C9939100FCE837 /* miniDict.json */,
 				B2F7043B22C9135200FCE837 /* revDict.json */,
